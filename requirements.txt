@@ -4,4 +4,6 @@ numpy
 ezdxf
 reportlab
 matplotlib
+google-generativeai
+pillow
 gunicorn
