@@ -86,7 +86,7 @@ def process_design(image_path, site_length, site_width, client_name, location):
         
     c.save()
 
-    # 3. Python 3D Render (Blender को सट्टा)
+    # 3. Python 3D Render (No Blender)
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     
@@ -96,7 +96,6 @@ def process_design(image_path, site_length, site_width, client_name, location):
         dx = w['w'] * 0.05
         dy = w['h'] * 0.05
         dz = 3.0 
-        
         ax.bar3d(x, y, 0, dx, dy, dz, color='lightgray', edgecolor='black', alpha=0.8)
         
     ax.set_xlabel('X')
