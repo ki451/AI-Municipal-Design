@@ -13,33 +13,32 @@ app = Flask(__name__)
 app.config['OUTPUT_FOLDER'] = 'static/outputs'
 os.makedirs(app.config['OUTPUT_FOLDER'], exist_ok=True)
 
-# ⚠️ यहाँ तपाईंको Google Gemini API Key राख्नुहोला
-import os
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "") 
-genai.configure(api_key=GEMINI_API_KEY)
+# 🔒 API Key अब कोड भित्र छैन, Render को Environment Variable बाट आउँछ
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
 
 def get_designs_from_ai(site_length, site_width, requirements):
     model = genai.GenerativeModel('gemini-1.5-flash')
     
     prompt = f"""
     You are an expert licensed architect in Nepal. 
-    Design 5 different layout options for a house on a site of {site_length} ft by {site_width} ft.
+    Design exactly 5 different layout options for a house on a site of {site_length} ft by {site_width} ft.
     Client Requirements: {requirements}.
     
-    Rules to follow (Nepal Building Code):
-    1. Leave a setback of at least 1.5 meters (5 ft) from the front and 1 meter (3 ft) from sides/back.
+    Rules to follow strictly (Nepal Building Code):
+    1. Leave a setback of at least 5 ft from the front, and 3 ft from sides/back.
     2. Do not exceed Ground Coverage of 70%.
-    3. Include a Puja room in the North-East if possible (Vastu).
+    3. Include a Puja room in the North-East (Vastu).
     4. Ensure rooms do not overlap and fit within the buildable area.
     
     Return ONLY a valid JSON array of 5 objects.
     Each object must have:
-    1. "title": "Name of the design concept (e.g., Vastu Friendly, Open Plan)"
+    1. "title": "Name of the design concept (e.g., Vastu Friendly, Open Plan, Compact)"
     2. "rooms": Array of objects with: "name" (string), "x" (number), "y" (number), "w" (number), "h" (number).
     
     All dimensions must be in feet. Use bottom-left corner as (0,0).
     Do not include markdown, only the raw JSON array.
-    Example: [{{"title": "Option 1", "rooms": [{{"name": "Living", "x": 5, "y": 5, "w": 15, "h": 12}}]}}]
     """
     
     try:
@@ -77,12 +76,11 @@ def index():
             rooms = design["rooms"]
             title = design.get("title", f"Option {i+1}")
             
-            # --- 1. AutoCAD DXF (Wall Thickness सहित) ---
+            # --- 1. AutoCAD DXF ---
             doc = ezdxf.new('R2010')
             msp = doc.modelspace()
             doc.layers.add(name="Walls", color=7)
             for r in rooms:
-                # Wall thickness 0.5 ft
                 points = [(r["x"], r["y"]), (r["x"]+r["w"], r["y"]), (r["x"]+r["w"], r["y"]+r["h"]), (r["x"], r["y"]+r["h"])]
                 msp.add_lwpolyline(points, close=True, dxfattribs={"layer": "Walls"})
                 msp.add_text(r["name"], dxfattribs={"layer": "Walls", "height": 1}).set_placement((r["x"]+2, r["y"]+2))
@@ -118,7 +116,7 @@ def index():
             c.drawString(40, height - 185, f"Ground Coverage: {(builtup/total_area)*100:.1f}% (Max 70%)")
             c.save()
 
-            # --- 3. Python 3D Render (Solid Walls) ---
+            # --- 3. Python 3D Render (Wireframe) ---
             fig = plt.figure(figsize=(6, 6))
             ax = fig.add_subplot(111, projection='3d')
             colors_list = ['#ff9999','#66b3ff','#99ff99','#ffcc99', '#c2c2f0', '#ffb3e6']
@@ -126,9 +124,7 @@ def index():
             for j, r in enumerate(rooms):
                 x, y, w, h = r['x'], r['y'], r['w'], r['h']
                 color = colors_list[j % len(colors_list)]
-                # Draw solid floor
                 ax.add_collection3d(Poly3DCollection([[(x,y,0), (x+w,y,0), (x+w,y+h,0), (x,y+h,0)]], color=color, alpha=0.8))
-                # Draw walls (Lines)
                 for z in [0, 3]:
                     ax.plot([x, x+w, x+w, x, x], [y, y, y+h, y+h, y], [z, z, z, z, z], color='black', linewidth=1)
                 ax.plot([x, x], [y, y], [0, 3], color='black', linewidth=1)
