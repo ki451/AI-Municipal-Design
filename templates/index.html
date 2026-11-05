@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Architect Generator</title>
+    <title>Nepal AI Architect - 5 Options</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; margin: 0; padding: 20px; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { color: #1a365d; text-align: center; }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
@@ -15,24 +15,26 @@
         .row .form-group { flex: 1; }
         button { background: #2b6cb0; color: white; border: none; padding: 12px; border-radius: 5px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         button:hover { background: #2c5282; }
-        .result { margin-top: 25px; padding-top: 20px; border-top: 2px solid #eee; text-align: center; }
-        .btn-download { display: block; background: #38a169; color: white; text-decoration: none; padding: 12px; border-radius: 5px; margin-top: 10px; font-weight: bold; }
-        img { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #ddd; }
+        .results { margin-top: 30px; display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #fff; }
+        .card h3 { margin-top: 0; color: #2c5282; }
+        .btn-download { display: inline-block; background: #38a169; color: white; text-decoration: none; padding: 8px 12px; border-radius: 5px; margin-top: 10px; margin-right: 5px; font-size: 14px; }
+        img { width: 100%; max-width: 500px; border-radius: 8px; margin-top: 10px; border: 1px solid #eee; display: block; margin-left: auto; margin-right: auto; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>🏛️ AI Architect</h2>
-        <p style="text-align: center; color: #666;">Generate designs from scratch</p>
+        <h2>🏛️ Nepal AI Architect (5 Options)</h2>
+        <p style="text-align: center; color: #666;">Generates designs based on Nepal Building Codes</p>
         
         <form method="POST">
             <div class="form-group">
                 <label>Client Name</label>
-                <input type="text" name="client_name" required>
+                <input type="text" name="client_name" value="Ram Bahadur" required>
             </div>
             <div class="form-group">
                 <label>Location</label>
-                <input type="text" name="location" required>
+                <input type="text" name="location" value="Kathmandu" required>
             </div>
             <div class="row">
                 <div class="form-group">
@@ -45,19 +47,25 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>Requirements (e.g., 2 Bedrooms, 1 Kitchen, 1 Living)</label>
-                <input type="text" name="requirements" value="2 Bedrooms, 1 Kitchen, 1 Living, 1 Bath" required>
+                <label>Requirements (e.g., 2 Bedrooms, 1 Kitchen)</label>
+                <input type="text" name="requirements" value="2 Bedrooms, 1 Kitchen, 1 Living, 1 Bath, 1 Puja" required>
             </div>
             
-            <button type="submit">Generate Design</button>
+            <button type="submit">Generate 5 Design Options</button>
         </form>
 
-        {% if render_url %}
-        <div class="result">
-            <h3>✅ Design Generated!</h3>
-            <img src="{{ render_url }}" alt="3D Render">
-            <a href="{{ pdf_url }}" class="btn-download">📄 Download PDF</a>
-            <a href="{{ dxf_url }}" class="btn-download">📐 Download AutoCAD DXF</a>
+        {% if designs %}
+        <div class="results">
+            {% for design in designs %}
+            <div class="card">
+                <h3>Option {{ loop.index }}: {{ design.title }}</h3>
+                <img src="{{ design.render_url }}" alt="3D Render">
+                <div style="text-align: center; margin-top: 10px;">
+                    <a href="{{ design.pdf_url }}" class="btn-download">📄 Download PDF</a>
+                    <a href="{{ design.dxf_url }}" class="btn-download">📐 Download AutoCAD DXF</a>
+                </div>
+            </div>
+            {% endfor %}
         </div>
         {% endif %}
     </div>
