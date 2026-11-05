@@ -23,23 +23,29 @@ def process_design(image_path, site_length, site_width, client_name, location):
     clean_img_path = os.path.join(app.config['OUTPUT_FOLDER'], 'clean_input.png')
     cv2.imwrite(clean_img_path, img)
     
+    # 1. Image Processing (सुधारिएको)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
     thresh = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 21, 5)
     
     kernel = np.ones((3,3), np.uint8)
     thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel, iterations=2)
-    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # भित्री र बाहिरी दुवै पर्खाल पत्ता लगाउन RETR_TREE प्रयोग गर्ने
+    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     
     walls_data = []
-    for cnt in contours:
-        if cv2.contourArea(cnt) > 2000:
+    for i, cnt in enumerate(contours):
+        area = cv2.contourArea(cnt)
+        if 500 < area < 50000: # धेरै सानो (फोहोर) र धेरै ठूलो (बोर्डर) हटाउने
             x, y, w, h = cv2.boundingRect(cnt)
-            walls_data.append({"x": x, "y": y, "w": w, "h": h})
+            # फोहोर हटाउन aspect ratio जाँच्ने
+            if w > 10 and h > 10: 
+                walls_data.append({"x": x, "y": y, "w": w, "h": h})
 
     pixel_to_feet = site_length / 800 
     
-    # 1. AutoCAD DXF
+    # 2. AutoCAD DXF
     doc = ezdxf.new('R2010')
     msp = doc.modelspace()
     doc.layers.add(name="Walls", color=7)
@@ -53,7 +59,7 @@ def process_design(image_path, site_length, site_width, client_name, location):
     dxf_path = os.path.join(app.config['OUTPUT_FOLDER'], "Municipal_Plan.dxf")
     doc.saveas(dxf_path)
 
-    # 2. PDF Report
+    # 3. PDF Report
     pdf_path = os.path.join(app.config['OUTPUT_FOLDER'], "Municipal_Report.pdf")
     c = canvas.Canvas(pdf_path, pagesize=landscape(A4))
     width, height = landscape(A4)
@@ -79,15 +85,10 @@ def process_design(image_path, site_length, site_width, client_name, location):
     c.drawString(40, height - 155, f"Total Built-up Area: {builtup_sqft:.2f} Sq. Ft.")
     c.drawString(40, height - 170, f"F.A.R. (Floor Area Ratio): {far:.2f}")
 
-    try:
-        c.drawImage(clean_img_path, 450, 100, width=300, height=250, preserveAspectRatio=True)
-    except Exception as e:
-        c.drawString(450, 200, "[Image could not be loaded]")
-        
     c.save()
 
-    # 3. Python 3D Render (No Blender)
-    fig = plt.figure()
+    # 4. Python 3D Render (सुधारिएको)
+    fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
     
     for w in walls_data:
@@ -96,7 +97,8 @@ def process_design(image_path, site_length, site_width, client_name, location):
         dx = w['w'] * 0.05
         dy = w['h'] * 0.05
         dz = 3.0 
-        ax.bar3d(x, y, 0, dx, dy, dz, color='lightgray', edgecolor='black', alpha=0.8)
+        # पारदर्शी पर्खाल (alpha=0.3) ताकि भित्र देखियोस्
+        ax.bar3d(x, y, 0, dx, dy, dz, color='skyblue', edgecolor='black', alpha=0.3)
         
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
