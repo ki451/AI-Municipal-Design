@@ -1,188 +1,39 @@
-﻿from flask import Flask, render_template, request, url_for
-import os, cv2, json, subprocess, ezdxf
-from reportlab.lib.pagesizes import A4, landscape
-from reportlab.pdfgen import canvas
-from reportlab.lib import colors
-
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
-app.config['OUTPUT_FOLDER'] = 'static/outputs'
-
-def process_design(image_path, site_length, site_width, client_name, location):
-    img = cv2.imread(image_path)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-    
-    # पर्खाल पत्ता लगाउने
-    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
-    
-    walls_data = []
-    for i, cnt in enumerate(contours):
-        if cv2.contourArea(cnt) > 1000:
-            x, y, w, h = cv2.boundingRect(cnt)
-            is_inner = hierarchy[0][i][3] != -1
-            walls_data.append({"x": x, "y": y, "w": w, "h": h, "is_inner": is_inner})
-
-    # --- 1. AutoCAD DXF (Professional with Dimensions & Title Block) ---
-    doc = ezdxf.new('R2010')
-    msp = doc.modelspace()
-    
-    doc.layers.add(name="Outer_Walls", color=7) 
-    doc.layers.add(name="Inner_Walls", color=3) 
-    doc.layers.add(name="Dimensions", color=1)
-    doc.layers.add(name="Title_Block", color=2)
-    
-    # स्केल क्याल्कुलेसन (Pixels to Feet)
-    # मानौं फोटोको चौडाई 800px छ र जग्गा 30ft छ
-    pixel_to_feet = site_length / 800 
-    
-    for w in walls_data:
-        layer = "Inner_Walls" if w["is_inner"] else "Outer_Walls"
-        # Wall Polyline
-        points = [(w["x"]*pixel_to_feet, w["y"]*pixel_to_feet), 
-                  ((w["x"]+w["w"])*pixel_to_feet, w["y"]*pixel_to_feet), 
-                  ((w["x"]+w["w"])*pixel_to_feet, (w["y"]+w["h"])*pixel_to_feet), 
-                  (w["x"]*pixel_to_feet, (w["y"]+w["h"])*pixel_to_feet)]
-        msp.add_lwpolyline(points, close=True, dxfattribs={"layer": layer})
-        
-        # Dimension Line (नाप)
-        msp.add_linear_dim(base=(points[0][0], points[0][1] - 2), p1=points[0], p2=points[1], dimstyle="EZDXF", dxfattribs={"layer": "Dimensions"}).render()
-
-    # Title Block (AutoCAD मा)
-    msp.add_text(f"PROJECT: {client_name}'s House", dxfattribs={"layer": "Title_Block", "height": 2}).set_placement((0, -10))
-    msp.add_text(f"LOCATION: {location}", dxfattribs={"layer": "Title_Block", "height": 1.5}).set_placement((0, -13))
-    msp.add_text(f"SCALE: 1:{int(1/pixel_to_feet)} | SITE: {site_length}x{site_width} ft", dxfattribs={"layer": "Title_Block", "height": 1}).set_placement((0, -15))
-
-    dxf_path = os.path.join(app.config['OUTPUT_FOLDER'], "Municipal_Plan.dxf")
-    doc.saveas(dxf_path)
-
-    # --- 2. Municipal PDF Report (Blueprint Style) ---
-    pdf_path = os.path.join(app.config['OUTPUT_FOLDER'], "Area_Statement.pdf")
-    c = canvas.Canvas(pdf_path, pagesize=landscape(A4))
-    width, height = landscape(A4)
-    
-    # PDF Border
-    c.setStrokeColor(colors.black)
-    c.setLineWidth(2)
-    c.rect(20, 20, width-40, height-40)
-    
-    # Title Block (PDF)
-    c.setFont("Helvetica-Bold", 14)
-    c.drawString(40, height - 60, "MUNICIPAL BUILDING PERMIT - ARCHITECTURAL DRAWING")
-    c.setFont("Helvetica", 12)
-    c.drawString(40, height - 80, f"Project: {client_name}'s Residence")
-    c.drawString(40, height - 95, f"Location: {location}")
-    
-    # Calculation
-    total_builtup_pixels = sum([w["w"] * w["h"] for w in walls_data if not w["is_inner"]])
-    builtup_sqft = total_builtup_pixels * (pixel_to_feet**2)
-    site_area_sqft = site_length * site_width
-    far = builtup_sqft / site_area_sqft if site_area_sqft > 0 else 0
-    
-    c.drawString(40, height - 130, f"Total Plot Area: {site_area_sqft:.2f} Sq. Ft.")
-    c.drawString(40, height - 145, f"Total Built-up Area: {builtup_sqft:.2f} Sq. Ft.")
-    c.drawString(40, height - 160, f"F.A.R. (Floor Area Ratio): {far:.2f}")
-    
-    # 2D Image on PDF
-    c.drawImage(image_path, 400, 100, width=350, height=300, preserveAspectRatio=True)
-    c.save()
-
-    # --- 3. Blender 3D Render ---
-    json_path = os.path.join(app.config['OUTPUT_FOLDER'], "walls.json")
-    with open(json_path, "w") as f: json.dump(walls_data, f)
-
-    blender_script = os.path.join(app.config['OUTPUT_FOLDER'], "render.py")
-    b_code = f"""
-import bpy, json, math
-bpy.ops.object.select_all(action='SELECT'); bpy.ops.object.delete()
-with open(r"{json_path}", "r") as f: walls = json.load(f)
-bpy.ops.mesh.primitive_plane_add(size=100, location=(0, 0, 0))
-for w in walls:
-    z_height = 1.5 if w.get("is_inner") else 1.8
-    bpy.ops.mesh.primitive_cube_add(size=1, location=((w["x"]-400)*0.05, -(w["y"]-300)*0.05, z_height))
-    bpy.context.active_object.scale = (w["w"]*0.05, w["h"]*0.05, z_height)
-bpy.ops.object.camera_add(location=(15, -15, 15), rotation=(math.radians(60), 0, math.radians(45)))
-bpy.context.scene.camera = bpy.context.active_object
-bpy.ops.object.light_add(type='SUN', location=(10, 10, 20))
-bpy.context.scene.render.engine = 'BLENDER_EEVEE'
-bpy.context.scene.render.filepath = r"{os.path.join(app.config['OUTPUT_FOLDER'], '3D_Render.png')}"
-bpy.ops.render.render(write_still=True)
-"""
-    with open(blender_script, "w") as f: f.write(b_code)
-
-    blender_exe = r"C:\Program Files\Blender Foundation\Blender 5.2\blender.exe"
-    try:
-        subprocess.run([blender_exe, "-b", "-P", blender_script], check=True)
-    except Exception as e:
-        print("Blender Error:", e)
-
-    return dxf_path, pdf_path, os.path.join(app.config['OUTPUT_FOLDER'], '3D_Render.png')
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        file = request.files['floor_plan']
-        site_length = float(request.form.get('site_length', 30))
-        site_width = float(request.form.get('site_width', 40))
-        client_name = request.form.get('client_name', 'Client')
-        location = request.form.get('location', 'Kathmandu')
-        
-        if file:
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            file.save(filepath)
-            dxf, pdf, render = process_design(filepath, site_length, site_width, client_name, location)
-            return render_template('index.html', 
-                                   dxf_url=url_for('static', filename='outputs/Municipal_Plan.dxf'),
-                                   pdf_url=url_for('static', filename='outputs/Area_Statement.pdf'),
-                                   render_url=url_for('static', filename='outputs/3D_Render.png'))
-    return render_template('index.html')
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
-@'
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Municipal Design Package</title>
+    <title>AI Architect Generator</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f5; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; margin: 0; padding: 20px; }
         .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { color: #1a365d; text-align: center; }
-        p.subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
-        input[type="text"], input[type="number"], input[type="file"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        input[type="text"], input[type="number"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
         .row { display: flex; gap: 10px; }
         .row .form-group { flex: 1; }
         button { background: #2b6cb0; color: white; border: none; padding: 12px; border-radius: 5px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         button:hover { background: #2c5282; }
         .result { margin-top: 25px; padding-top: 20px; border-top: 2px solid #eee; text-align: center; }
         .btn-download { display: block; background: #38a169; color: white; text-decoration: none; padding: 12px; border-radius: 5px; margin-top: 10px; font-weight: bold; }
-        .btn-download:hover { background: #2f855a; }
         img { width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>🏛️ Municipal Design Package</h2>
-        <p class="subtitle">Professional Architectural Drawings</p>
+        <h2>🏛️ AI Architect</h2>
+        <p style="text-align: center; color: #666;">Generate designs from scratch</p>
         
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST">
             <div class="form-group">
-                <label>Client / Project Name</label>
-                <input type="text" name="client_name" placeholder="e.g., Ramesh Shrestha" required>
+                <label>Client Name</label>
+                <input type="text" name="client_name" required>
             </div>
             <div class="form-group">
-                <label>Location / Municipality</label>
-                <input type="text" name="location" placeholder="e.g., Budhanilkantha-10" required>
+                <label>Location</label>
+                <input type="text" name="location" required>
             </div>
-            <div class="form-group">
-                <label>Upload 2D Floor Plan</label>
-                <input type="file" name="floor_plan" accept="image/*" required>
-            </div>
-            
             <div class="row">
                 <div class="form-group">
                     <label>Site Length (ft)</label>
@@ -193,15 +44,19 @@ if __name__ == '__main__':
                     <input type="number" name="site_width" value="40" required>
                 </div>
             </div>
+            <div class="form-group">
+                <label>Requirements (e.g., 2 Bedrooms, 1 Kitchen, 1 Living)</label>
+                <input type="text" name="requirements" value="2 Bedrooms, 1 Kitchen, 1 Living, 1 Bath" required>
+            </div>
             
-            <button type="submit">Generate Final Design</button>
+            <button type="submit">Generate Design</button>
         </form>
 
         {% if render_url %}
         <div class="result">
-            <h3>✅ Final Design Ready!</h3>
+            <h3>✅ Design Generated!</h3>
             <img src="{{ render_url }}" alt="3D Render">
-            <a href="{{ pdf_url }}" class="btn-download">📄 Download PDF Blueprint</a>
+            <a href="{{ pdf_url }}" class="btn-download">📄 Download PDF</a>
             <a href="{{ dxf_url }}" class="btn-download">📐 Download AutoCAD DXF</a>
         </div>
         {% endif %}
