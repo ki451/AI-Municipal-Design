@@ -1,0 +1,86 @@
+﻿{
+    "designId":  "SCHOOL_REF_1",
+    "buildingType":  "school",
+    "sourceUrl":  "",
+    "sourceHash":  "",
+    "signature":  "b9ffeebc6f12888a3a1b14940119976925bca573c14d17fd8ea24d3e4fe81a82",
+    "roomCount":  7,
+    "rooms":  [
+                  {
+                      "id":  "s1",
+                      "rawType":  "classroom",
+                      "label":  "Class Room 1",
+                      "normalizedType":  "classroom"
+                  },
+                  {
+                      "id":  "s2",
+                      "rawType":  "classroom",
+                      "label":  "Class Room 2",
+                      "normalizedType":  "classroom"
+                  },
+                  {
+                      "id":  "s3",
+                      "rawType":  "classroom",
+                      "label":  "Class Room 3",
+                      "normalizedType":  "classroom"
+                  },
+                  {
+                      "id":  "s4",
+                      "rawType":  "classroom",
+                      "label":  "Class Room 4",
+                      "normalizedType":  "classroom"
+                  },
+                  {
+                      "id":  "s5",
+                      "rawType":  "office",
+                      "label":  "Staff Room",
+                      "normalizedType":  "office"
+                  },
+                  {
+                      "id":  "s6",
+                      "rawType":  "staircase",
+                      "label":  "Staircase",
+                      "normalizedType":  "staircase"
+                  },
+                  {
+                      "id":  "s7",
+                      "rawType":  "corridor",
+                      "label":  "Corridor",
+                      "normalizedType":  "corridor"
+                  }
+              ],
+    "adjacency":  {
+                      "s2":  [
+                                 "s7"
+                             ],
+                      "s1":  [
+                                 "s7"
+                             ],
+                      "s7":  [
+                                 "s1",
+                                 "s2",
+                                 "s3",
+                                 "s4",
+                                 "s5",
+                                 "s6"
+                             ],
+                      "s4":  [
+                                 "s7"
+                             ],
+                      "s3":  [
+                                 "s7"
+                             ],
+                      "s6":  [
+                                 "s7"
+                             ],
+                      "s5":  [
+                                 "s7"
+                             ]
+                  },
+    "completeness":  1,
+    "issues":  [
+
+               ],
+    "eligibleForKB":  true,
+    "extractedAt":  "2026-11-02T17:27:06.5979599+05:45"
+}

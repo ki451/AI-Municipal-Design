@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Site Plan - Setback Check</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 20px; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; }
+        h2 { color: #2c3e50; margin-top: 0; }
+        .info { margin-bottom: 20px; padding: 10px; background: #e8f4f8; border-left: 4px solid #3498db; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Site Plan & Setback Verification</h2>
+        <div class="info">
+            <strong>Plot:</strong> 12 m × 20 m (240 m²)<br>
+            <strong>Road:</strong> 6 m wide<br>
+            <strong>Max Ground Coverage:</strong> 61.9%
+        </div>
+
+        <svg width="440" height="600" style="background: #fff; border: 1px solid #ccc;">
+            <!-- सडक (Road) -->
+            <rect x="0" y="-10" width="440" height="50" fill="#7f8c8d" />
+            <text x="220" y="25" fill="white" font-size="16" font-weight="bold" text-anchor="middle">ROAD (6 m Wide)</text>
+
+            <!-- जग्गाको सिमाना (Plot Boundary) -->
+            <rect x="150" y="50" width="240" height="400" fill="#fdfefe" stroke="#2c3e50" stroke-width="3" />
+            <text x="160" y="70" fill="#2c3e50" font-size="14" font-weight="bold">Plot Boundary</text>
+
+            <!-- अगाडिको सेटब्याक (Front Setback) -->
+            <rect x="150" y="50" width="240" height="40" fill="rgba(231, 76, 60, 0.2)" />
+            <text x="270" y="75" fill="#c0392b" font-size="12" text-anchor="middle">Front Setback (2 m)</text>
+
+            <!-- घर बनाउन मिल्ने क्षेत्र (Building Footprint) -->
+            <rect x="180" y="90" width="180" height="330" fill="#d5f5e3" stroke="#27ae60" stroke-width="2" stroke-dasharray="5,5" />
+            <text x="270" y="255" fill="#27ae60" font-size="16" font-weight="bold" text-anchor="middle">BUILDING FOOTPRINT</text>
+            <text x="270" y="275" fill="#27ae60" font-size="12" text-anchor="middle">9m × 16.5m</text>
+
+            <!-- छेउको सेटब्याक (Side Setback) -->
+            <text x="165" y="250" fill="#c0392b" font-size="12" text-anchor="middle" transform="rotate(-90 165 250)">Side (1.5 m)</text>
+            
+            <!-- पछाडिको सेटब्याक (Rear Setback) -->
+            <rect x="150" y="420" width="240" height="30" fill="rgba(231, 76, 60, 0.2)" />
+            <text x="270" y="440" fill="#c0392b" font-size="12" text-anchor="middle">Rear Setback (1.5 m)</text>
+        </svg>
+    </div>
+</body>
+</html>

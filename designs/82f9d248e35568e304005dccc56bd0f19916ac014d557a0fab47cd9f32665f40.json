@@ -1,0 +1,76 @@
+﻿{
+    "designId":  "HOUSE_A",
+    "buildingType":  "house",
+    "sourceUrl":  "https://...",
+    "sourceHash":  "your-sha256-here",
+    "signature":  "82f9d248e35568e304005dccc56bd0f19916ac014d557a0fab47cd9f32665f40",
+    "roomCount":  6,
+    "rooms":  [
+                  {
+                      "id":  "r1",
+                      "rawType":  "living",
+                      "label":  "Living",
+                      "normalizedType":  "living"
+                  },
+                  {
+                      "id":  "r2",
+                      "rawType":  "kitchen",
+                      "label":  "Kitchen",
+                      "normalizedType":  "kitchen"
+                  },
+                  {
+                      "id":  "r3",
+                      "rawType":  "bedroom",
+                      "label":  "Master Bedroom",
+                      "normalizedType":  "bedroom"
+                  },
+                  {
+                      "id":  "r4",
+                      "rawType":  "bathroom",
+                      "label":  "Bathroom",
+                      "normalizedType":  "bathroom"
+                  },
+                  {
+                      "id":  "r5",
+                      "rawType":  "staircase",
+                      "label":  "Staircase",
+                      "normalizedType":  "staircase"
+                  },
+                  {
+                      "id":  "r6",
+                      "rawType":  "corridor",
+                      "label":  "Corridor",
+                      "normalizedType":  "corridor"
+                  }
+              ],
+    "adjacency":  {
+                      "r3":  [
+                                 "r6",
+                                 "r4"
+                             ],
+                      "r5":  [
+                                 "r6"
+                             ],
+                      "r2":  [
+                                 "r6"
+                             ],
+                      "r4":  [
+                                 "r3"
+                             ],
+                      "r6":  [
+                                 "r1",
+                                 "r2",
+                                 "r3",
+                                 "r5"
+                             ],
+                      "r1":  [
+                                 "r6"
+                             ]
+                  },
+    "completeness":  1,
+    "issues":  [
+
+               ],
+    "eligibleForKB":  true,
+    "extractedAt":  "2026-11-02T17:24:42.3194471+05:45"
+}

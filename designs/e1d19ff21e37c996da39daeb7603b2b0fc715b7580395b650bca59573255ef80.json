@@ -1,0 +1,325 @@
+﻿{
+    "designId":  "SYNTH_20261102_175105",
+    "buildingType":  "house",
+    "sourceUrl":  "",
+    "sourceHash":  "2ab2751476b6152444c7069a774805de3b581479cc557f7b80521d07db97fd1e",
+    "signature":  "e1d19ff21e37c996da39daeb7603b2b0fc715b7580395b650bca59573255ef80",
+    "roomCount":  10,
+    "rooms":  [
+                  {
+                      "id":  "m1",
+                      "rawType":  "",
+                      "label":  "Living",
+                      "normalizedType":  "living"
+                  },
+                  {
+                      "id":  "m2",
+                      "rawType":  "",
+                      "label":  "Kitchen",
+                      "normalizedType":  "kitchen"
+                  },
+                  {
+                      "id":  "m3",
+                      "rawType":  "",
+                      "label":  "Master Bedroom",
+                      "normalizedType":  "bedroom"
+                  },
+                  {
+                      "id":  "m4",
+                      "rawType":  "",
+                      "label":  "Bedroom 2",
+                      "normalizedType":  "bedroom"
+                  },
+                  {
+                      "id":  "m5",
+                      "rawType":  "",
+                      "label":  "bedroom",
+                      "normalizedType":  "bedroom"
+                  },
+                  {
+                      "id":  "m6",
+                      "rawType":  "",
+                      "label":  "Bathroom",
+                      "normalizedType":  "bathroom"
+                  },
+                  {
+                      "id":  "m7",
+                      "rawType":  "",
+                      "label":  "bathroom",
+                      "normalizedType":  "bathroom"
+                  },
+                  {
+                      "id":  "m8",
+                      "rawType":  "",
+                      "label":  "Puja",
+                      "normalizedType":  "puja"
+                  },
+                  {
+                      "id":  "m9",
+                      "rawType":  "",
+                      "label":  "Staircase",
+                      "normalizedType":  "staircase"
+                  },
+                  {
+                      "id":  "m10",
+                      "rawType":  "",
+                      "label":  "Corridor",
+                      "normalizedType":  "corridor"
+                  }
+              ],
+    "adjacency":  {
+                      "m7":  [
+                                 "m3"
+                             ],
+                      "m5":  [
+                                 "m10"
+                             ],
+                      "m9":  [
+                                 "m10"
+                             ],
+                      "m4":  [
+                                 "m10"
+                             ],
+                      "m3":  [
+                                 "m10",
+                                 "m6",
+                                 "m7"
+                             ],
+                      "m6":  [
+                                 "m3"
+                             ],
+                      "m10":  [
+                                  "m1",
+                                  "m2",
+                                  "m3",
+                                  "m4",
+                                  "m5",
+                                  "m8",
+                                  "m9"
+                              ],
+                      "m8":  [
+                                 "m10"
+                             ],
+                      "m2":  [
+                                 "m10"
+                             ],
+                      "m1":  [
+                                 "m10"
+                             ]
+                  },
+    "completeness":  1,
+    "issues":  [
+
+               ],
+    "eligibleForKB":  true,
+    "extractedAt":  "2026-11-02T17:51:05.5521413+05:45",
+    "provenance":  {
+                       "m7":  "synthesized (client needs bathroom)",
+                       "m9":  "reference \u0027Staircase\u0027 from SEED_FULL (auto-added for vertical circulation)",
+                       "m4":  "reference \u0027Bedroom 2\u0027 from SEED_FULL",
+                       "m3":  "reference \u0027Master Bedroom\u0027 from SEED_FULL",
+                       "m6":  "reference \u0027Bathroom\u0027 from SEED_FULL",
+                       "m5":  "synthesized (client needs bedroom)",
+                       "m8":  "reference \u0027Puja\u0027 from SEED_FULL",
+                       "m2":  "reference \u0027Kitchen\u0027 from SEED_FULL",
+                       "m1":  "reference \u0027Living\u0027 from SEED_FULL",
+                       "m10":  "reference \u0027Corridor\u0027 from SEED_FULL (auto-added for circulation)"
+                   },
+    "predictedScore":  0.913,
+    "sourceReference":  "SEED_FULL",
+    "status":  "SYNTHESIZED",
+    "similarityBreakdown":  {
+                                "score":  0.913,
+                                "typeMatch":  1,
+                                "coverage":  1,
+                                "jaccard":  0.714,
+                                "countRatio":  0.8,
+                                "completeness":  1,
+                                "missingTypes":  [
+
+                                                 ]
+                            },
+    "envelopeFit":  {
+                        "envelope":  {
+                                         "widthM":  12,
+                                         "lengthM":  30,
+                                         "areaPerFloorM2":  360,
+                                         "floorCount":  3
+                                     },
+                        "rooms":  [
+                                      {
+                                          "id":  "m1",
+                                          "normalizedType":  "living",
+                                          "label":  "Living",
+                                          "widthM":  3.5,
+                                          "lengthM":  4,
+                                          "areaM2":  14,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m2",
+                                          "normalizedType":  "kitchen",
+                                          "label":  "Kitchen",
+                                          "widthM":  2.5,
+                                          "lengthM":  3,
+                                          "areaM2":  7.5,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m3",
+                                          "normalizedType":  "bedroom",
+                                          "label":  "Master Bedroom",
+                                          "widthM":  3,
+                                          "lengthM":  3.5,
+                                          "areaM2":  10.5,
+                                          "floor":  2,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m4",
+                                          "normalizedType":  "bedroom",
+                                          "label":  "Bedroom 2",
+                                          "widthM":  3,
+                                          "lengthM":  3.5,
+                                          "areaM2":  10.5,
+                                          "floor":  2,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m5",
+                                          "normalizedType":  "bedroom",
+                                          "label":  "bedroom",
+                                          "widthM":  3,
+                                          "lengthM":  3.5,
+                                          "areaM2":  10.5,
+                                          "floor":  3,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m6",
+                                          "normalizedType":  "bathroom",
+                                          "label":  "Bathroom",
+                                          "widthM":  1.5,
+                                          "lengthM":  2,
+                                          "areaM2":  3,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m7",
+                                          "normalizedType":  "bathroom",
+                                          "label":  "bathroom",
+                                          "widthM":  1.5,
+                                          "lengthM":  2,
+                                          "areaM2":  3,
+                                          "floor":  2,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m8",
+                                          "normalizedType":  "puja",
+                                          "label":  "Puja",
+                                          "widthM":  1.5,
+                                          "lengthM":  2,
+                                          "areaM2":  3,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m9",
+                                          "normalizedType":  "staircase",
+                                          "label":  "Staircase",
+                                          "widthM":  2.5,
+                                          "lengthM":  4.16,
+                                          "areaM2":  10.4,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m10",
+                                          "normalizedType":  "corridor",
+                                          "label":  "Corridor",
+                                          "widthM":  1.2,
+                                          "lengthM":  3,
+                                          "areaM2":  3.6,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      }
+                                  ],
+                        "floorFit":  [
+                                         {
+                                             "floor":  1,
+                                             "areaUsedM2":  41.5,
+                                             "areaAvailableM2":  360,
+                                             "usagePct":  11.5,
+                                             "status":  "WARN"
+                                         },
+                                         {
+                                             "floor":  2,
+                                             "areaUsedM2":  24,
+                                             "areaAvailableM2":  360,
+                                             "usagePct":  6.7,
+                                             "status":  "WARN"
+                                         },
+                                         {
+                                             "floor":  3,
+                                             "areaUsedM2":  10.5,
+                                             "areaAvailableM2":  360,
+                                             "usagePct":  2.9,
+                                             "status":  "WARN"
+                                         }
+                                     ],
+                        "circulation":  {
+                                            "corridorAreaM2":  3.6,
+                                            "totalAreaM2":  76,
+                                            "percentage":  4.7,
+                                            "status":  "PASS",
+                                            "corridorCount":  1
+                                        },
+                        "stairAlign":  {
+                                           "status":  "PASS",
+                                           "reason":  null,
+                                           "present":  true,
+                                           "floorCount":  3,
+                                           "detail":  "staircase floor: 1"
+                                       },
+                        "setback":  {
+                                        "status":  "NOT_VERIFIED",
+                                        "approvalReady":  false,
+                                        "scope":  "SETBACK_EVIDENCE_REQUIRED",
+                                        "missing":  [
+                                                        "frontSetbackM",
+                                                        "rearSetbackM",
+                                                        "sideSetbackLeftM",
+                                                        "sideSetbackRightM",
+                                                        "plotWidthM",
+                                                        "plotLengthM",
+                                                        "roadWidthM",
+                                                        "municipality",
+                                                        "applicableBylaw"
+                                                    ],
+                                        "reason":  "Site context र municipality bylaw बिना setback verify गर्न मिल्दैन"
+                                    },
+                        "issues":  [
+                                       "FLOOR_1_UNDERUSED (11.5%)",
+                                       "FLOOR_2_UNDERUSED (6.7%)",
+                                       "FLOOR_3_UNDERUSED (2.9%)"
+                                   ],
+                        "hardFailures":  [
+
+                                         ],
+                        "valid":  true
+                    }
+}

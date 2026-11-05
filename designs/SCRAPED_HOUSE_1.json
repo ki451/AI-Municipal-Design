@@ -1,0 +1,34 @@
+﻿{
+    "designId":  "SCRAPED_HOUSE_1",
+    "buildingType":  "house",
+    "sourceUrl":  "",
+    "sourceHash":  "",
+    "signature":  "f5861b99968d43316fe992b839c8f419bd2c3eb36c6aa477ce3c38263da4f9ff",
+    "roomCount":  2,
+    "rooms":  [
+                  {
+                      "id":  "r1",
+                      "rawType":  "bedroom",
+                      "label":  "BEDROOM",
+                      "normalizedType":  "bedroom"
+                  },
+                  {
+                      "id":  "r2",
+                      "rawType":  "room",
+                      "label":  "",
+                      "normalizedType":  "unknown"
+                  }
+              ],
+    "adjacency":  {
+
+                  },
+    "completeness":  0.1,
+    "issues":  [
+                   "Few rooms",
+                   "1 unknown-type rooms",
+                   "No adjacency",
+                   "No circulation"
+               ],
+    "eligibleForKB":  false,
+    "extractedAt":  "2026-11-02T20:05:45.4849035+05:45"
+}

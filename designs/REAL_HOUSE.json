@@ -1,0 +1,44 @@
+﻿{
+    "designId":  "REAL_HOUSE",
+    "buildingType":  "house",
+    "sourceUrl":  "",
+    "sourceHash":  "",
+    "signature":  "d0054f577ec2afef6df06572e2f0d9bcd88b192f7d56a1647520b2f68e42a427",
+    "roomCount":  4,
+    "rooms":  [
+                  {
+                      "id":  "r1",
+                      "rawType":  "living",
+                      "label":  "Living Room",
+                      "normalizedType":  "living"
+                  },
+                  {
+                      "id":  "r2",
+                      "rawType":  "bedroom",
+                      "label":  "Master Bedroom",
+                      "normalizedType":  "bedroom"
+                  },
+                  {
+                      "id":  "r3",
+                      "rawType":  "kitchen",
+                      "label":  "Kitchen",
+                      "normalizedType":  "kitchen"
+                  },
+                  {
+                      "id":  "r4",
+                      "rawType":  "bathroom",
+                      "label":  "Bathroom",
+                      "normalizedType":  "bathroom"
+                  }
+              ],
+    "adjacency":  {
+
+                  },
+    "completeness":  0.5,
+    "issues":  [
+                   "No adjacency",
+                   "No circulation"
+               ],
+    "eligibleForKB":  false,
+    "extractedAt":  "2026-11-02T20:09:00.8010118+05:45"
+}

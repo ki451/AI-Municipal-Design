@@ -1,0 +1,27 @@
+﻿{
+    "designId":  "NEPAL_191432",
+    "buildingType":  "house",
+    "sourceUrl":  "",
+    "sourceHash":  "",
+    "signature":  "a05e6feb79c854166f6c73783754dc0111ee87edd58bca22a77c3a8721fa729c",
+    "roomCount":  1,
+    "rooms":  [
+                  {
+                      "id":  "r1",
+                      "rawType":  "bedroom",
+                      "label":  "BEDROOM",
+                      "normalizedType":  "bedroom"
+                  }
+              ],
+    "adjacency":  {
+
+                  },
+    "completeness":  0.3,
+    "issues":  [
+                   "Few rooms",
+                   "No adjacency",
+                   "No circulation"
+               ],
+    "eligibleForKB":  false,
+    "extractedAt":  "2026-11-03T19:14:32.8450127+05:45"
+}

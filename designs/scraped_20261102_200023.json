@@ -1,0 +1,15 @@
+﻿
+{
+  "buildingType": "residential",
+  "rooms": [
+    {
+      "type": "bedroom",
+      "label": "BEDROOM"
+    },
+    {
+      "type": "room",
+      "label": ""
+    }
+  ]
+}
+

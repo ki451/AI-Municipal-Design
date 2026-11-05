@@ -1,0 +1,380 @@
+﻿[
+    {
+        "runId":  "RUN_20261102_172707_473",
+        "timestamp":  "2026-11-02T17:27:07.4738366+05:45",
+        "buildingType":  "school",
+        "totalRoomsRequired":  6,
+        "referenceCount":  1,
+        "topReferenceId":  "SCHOOL_REF_1",
+        "topReferenceScore":  0.844,
+        "synthesizedId":  "SYNTH_20261102_172707",
+        "synthesizedScore":  0.862,
+        "improvement":  0.018,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_173000_010",
+        "timestamp":  "2026-11-02T17:30:00.0106477+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  8,
+        "referenceCount":  5,
+        "topReferenceId":  "SYNTH_20261102_170642",
+        "topReferenceScore":  0.95,
+        "synthesizedId":  "SYNTH_20261102_172959",
+        "synthesizedScore":  0.913,
+        "improvement":  -0.037,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_173000_082",
+        "timestamp":  "2026-11-02T17:30:00.0820221+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  8,
+        "referenceCount":  5,
+        "topReferenceId":  "SYNTH_20261102_170642",
+        "topReferenceScore":  0.95,
+        "synthesizedId":  "SYNTH_20261102_173000",
+        "synthesizedScore":  0.913,
+        "improvement":  -0.037,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_173000_145",
+        "timestamp":  "2026-11-02T17:30:00.1454077+05:45",
+        "buildingType":  "school",
+        "totalRoomsRequired":  6,
+        "referenceCount":  1,
+        "topReferenceId":  "SCHOOL_REF_1",
+        "topReferenceScore":  0.844,
+        "synthesizedId":  "SYNTH_20261102_173000",
+        "synthesizedScore":  0.862,
+        "improvement":  0.018,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_173000_235",
+        "timestamp":  "2026-11-02T17:30:00.2352149+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  14,
+        "referenceCount":  5,
+        "topReferenceId":  "SYNTH_20261102_172351",
+        "topReferenceScore":  0.941,
+        "synthesizedId":  "SYNTH_20261102_173000",
+        "synthesizedScore":  0.941,
+        "improvement":  0,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  true
+    },
+    {
+        "runId":  "RUN_20261102_173414_517",
+        "timestamp":  "2026-11-02T17:34:14.5175741+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  8,
+        "referenceCount":  5,
+        "topReferenceId":  "SYNTH_20261102_170642",
+        "topReferenceScore":  0.95,
+        "synthesizedId":  "SYNTH_20261102_173414",
+        "synthesizedScore":  0.913,
+        "improvement":  -0.037,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_173627_960",
+        "timestamp":  "2026-11-02T17:36:27.9605570+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  8,
+        "referenceCount":  5,
+        "topReferenceId":  "SYNTH_20261102_170642",
+        "topReferenceScore":  0.95,
+        "synthesizedId":  "SYNTH_20261102_173627",
+        "synthesizedScore":  0.913,
+        "improvement":  -0.037,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_173917_210",
+        "timestamp":  "2026-11-02T17:39:17.2105504+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  8,
+        "referenceCount":  5,
+        "topReferenceId":  "SYNTH_20261102_170642",
+        "topReferenceScore":  0.95,
+        "synthesizedId":  "SYNTH_20261102_173917",
+        "synthesizedScore":  0.913,
+        "improvement":  -0.037,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_173917_288",
+        "timestamp":  "2026-11-02T17:39:17.2889975+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  14,
+        "referenceCount":  5,
+        "topReferenceId":  "SYNTH_20261102_173000",
+        "topReferenceScore":  0.941,
+        "synthesizedId":  "SYNTH_20261102_173917",
+        "synthesizedScore":  0.941,
+        "improvement":  0,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_173917_415",
+        "timestamp":  "2026-11-02T17:39:17.4157483+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  14,
+        "referenceCount":  5,
+        "topReferenceId":  "SYNTH_20261102_173000",
+        "topReferenceScore":  0.941,
+        "synthesizedId":  "SYNTH_20261102_173917",
+        "synthesizedScore":  0.941,
+        "improvement":  0,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  true
+    },
+    {
+        "runId":  "RUN_20261102_173918_310",
+        "timestamp":  "2026-11-02T17:39:18.3103353+05:45",
+        "buildingType":  "school",
+        "totalRoomsRequired":  6,
+        "referenceCount":  1,
+        "topReferenceId":  "SCHOOL_REF_1",
+        "topReferenceScore":  0.844,
+        "synthesizedId":  "SYNTH_20261102_173918",
+        "synthesizedScore":  0.862,
+        "improvement":  0.018,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_174131_876",
+        "timestamp":  "2026-11-02T17:41:31.8769330+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  8,
+        "referenceCount":  5,
+        "topReferenceId":  "SYNTH_20261102_170642",
+        "topReferenceScore":  0.95,
+        "synthesizedId":  "SYNTH_20261102_174131",
+        "synthesizedScore":  0.913,
+        "improvement":  -0.037,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_174131_940",
+        "timestamp":  "2026-11-02T17:41:31.9404762+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  14,
+        "referenceCount":  5,
+        "topReferenceId":  "SYNTH_20261102_173917",
+        "topReferenceScore":  0.941,
+        "synthesizedId":  "SYNTH_20261102_174131",
+        "synthesizedScore":  0.941,
+        "improvement":  0,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_174132_036",
+        "timestamp":  "2026-11-02T17:41:32.0362353+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  14,
+        "referenceCount":  5,
+        "topReferenceId":  "SYNTH_20261102_173917",
+        "topReferenceScore":  0.941,
+        "synthesizedId":  "SYNTH_20261102_174132",
+        "synthesizedScore":  0.941,
+        "improvement":  0,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  true
+    },
+    {
+        "runId":  "RUN_20261102_174132_099",
+        "timestamp":  "2026-11-02T17:41:32.0999893+05:45",
+        "buildingType":  "school",
+        "totalRoomsRequired":  6,
+        "referenceCount":  1,
+        "topReferenceId":  "SCHOOL_REF_1",
+        "topReferenceScore":  0.844,
+        "synthesizedId":  "SYNTH_20261102_174132",
+        "synthesizedScore":  0.862,
+        "improvement":  0.018,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    },
+    {
+        "runId":  "RUN_20261102_174735_181",
+        "timestamp":  "2026-11-02T17:47:35.1811910+05:45",
+        "buildingType":  "school",
+        "totalRoomsRequired":  6,
+        "referenceCount":  1,
+        "topReferenceId":  "SCHOOL_REF_1",
+        "topReferenceScore":  0.844,
+        "synthesizedId":  "SYNTH_20261102_174735",
+        "synthesizedScore":  0.862,
+        "improvement":  0.018,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  true
+    },
+    {
+        "runId":  "RUN_20261102_175105_560",
+        "timestamp":  "2026-11-02T17:51:05.5606448+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  8,
+        "referenceCount":  3,
+        "topReferenceId":  "SEED_FULL",
+        "topReferenceScore":  0.85,
+        "synthesizedId":  "SYNTH_20261102_175105",
+        "synthesizedScore":  0.913,
+        "improvement":  0.063,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  true
+    },
+    {
+        "runId":  "RUN_20261102_175223_048",
+        "timestamp":  "2026-11-02T17:52:23.0487946+05:45",
+        "buildingType":  "house",
+        "totalRoomsRequired":  14,
+        "referenceCount":  4,
+        "topReferenceId":  "SYNTH_20261102_174132",
+        "topReferenceScore":  0.941,
+        "synthesizedId":  "SYNTH_20261102_175222",
+        "synthesizedScore":  0.941,
+        "improvement":  0,
+        "status":  "APPROVED",
+        "stage":  "DONE",
+        "hardFailures":  [
+
+                         ],
+        "warnings":  [
+
+                     ],
+        "savedToKB":  false
+    }
+]

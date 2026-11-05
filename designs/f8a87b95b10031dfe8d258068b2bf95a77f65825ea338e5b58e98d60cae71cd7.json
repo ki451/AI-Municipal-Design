@@ -1,0 +1,280 @@
+﻿{
+    "designId":  "SYNTH_20261102_174735",
+    "buildingType":  "school",
+    "sourceUrl":  "",
+    "sourceHash":  "b9ffeebc6f12888a3a1b14940119976925bca573c14d17fd8ea24d3e4fe81a82",
+    "signature":  "f8a87b95b10031dfe8d258068b2bf95a77f65825ea338e5b58e98d60cae71cd7",
+    "roomCount":  8,
+    "rooms":  [
+                  {
+                      "id":  "m1",
+                      "rawType":  "",
+                      "label":  "Staff Room",
+                      "normalizedType":  "office"
+                  },
+                  {
+                      "id":  "m2",
+                      "rawType":  "",
+                      "label":  "Class Room 1",
+                      "normalizedType":  "classroom"
+                  },
+                  {
+                      "id":  "m3",
+                      "rawType":  "",
+                      "label":  "Class Room 2",
+                      "normalizedType":  "classroom"
+                  },
+                  {
+                      "id":  "m4",
+                      "rawType":  "",
+                      "label":  "Class Room 3",
+                      "normalizedType":  "classroom"
+                  },
+                  {
+                      "id":  "m5",
+                      "rawType":  "",
+                      "label":  "Class Room 4",
+                      "normalizedType":  "classroom"
+                  },
+                  {
+                      "id":  "m6",
+                      "rawType":  "",
+                      "label":  "classroom",
+                      "normalizedType":  "classroom"
+                  },
+                  {
+                      "id":  "m7",
+                      "rawType":  "",
+                      "label":  "Staircase",
+                      "normalizedType":  "staircase"
+                  },
+                  {
+                      "id":  "m8",
+                      "rawType":  "",
+                      "label":  "Corridor",
+                      "normalizedType":  "corridor"
+                  }
+              ],
+    "adjacency":  {
+                      "m7":  [
+                                 "m8"
+                             ],
+                      "m4":  [
+                                 "m8"
+                             ],
+                      "m3":  [
+                                 "m8"
+                             ],
+                      "m6":  [
+                                 "m8"
+                             ],
+                      "m5":  [
+                                 "m8"
+                             ],
+                      "m8":  [
+                                 "m1",
+                                 "m2",
+                                 "m3",
+                                 "m4",
+                                 "m5",
+                                 "m6",
+                                 "m7"
+                             ],
+                      "m2":  [
+                                 "m8"
+                             ],
+                      "m1":  [
+                                 "m8"
+                             ]
+                  },
+    "completeness":  1,
+    "issues":  [
+
+               ],
+    "eligibleForKB":  true,
+    "extractedAt":  "2026-11-02T17:47:35.1751848+05:45",
+    "provenance":  {
+                       "m7":  "reference \u0027Staircase\u0027 from SCHOOL_REF_1 (auto-added for vertical circulation)",
+                       "m4":  "reference \u0027Class Room 3\u0027 from SCHOOL_REF_1",
+                       "m3":  "reference \u0027Class Room 2\u0027 from SCHOOL_REF_1",
+                       "m6":  "synthesized (client needs classroom)",
+                       "m5":  "reference \u0027Class Room 4\u0027 from SCHOOL_REF_1",
+                       "m8":  "reference \u0027Corridor\u0027 from SCHOOL_REF_1 (auto-added for circulation)",
+                       "m2":  "reference \u0027Class Room 1\u0027 from SCHOOL_REF_1",
+                       "m1":  "reference \u0027Staff Room\u0027 from SCHOOL_REF_1"
+                   },
+    "predictedScore":  0.862,
+    "sourceReference":  "SCHOOL_REF_1",
+    "status":  "SYNTHESIZED",
+    "similarityBreakdown":  {
+                                "score":  0.862,
+                                "typeMatch":  1,
+                                "coverage":  1,
+                                "jaccard":  0.5,
+                                "countRatio":  0.75,
+                                "completeness":  1,
+                                "missingTypes":  [
+
+                                                 ]
+                            },
+    "envelopeFit":  {
+                        "envelope":  {
+                                         "widthM":  12,
+                                         "lengthM":  30,
+                                         "areaPerFloorM2":  360,
+                                         "floorCount":  3
+                                     },
+                        "rooms":  [
+                                      {
+                                          "id":  "m1",
+                                          "normalizedType":  "office",
+                                          "label":  "Staff Room",
+                                          "widthM":  3,
+                                          "lengthM":  3.5,
+                                          "areaM2":  10.5,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m2",
+                                          "normalizedType":  "classroom",
+                                          "label":  "Class Room 1",
+                                          "widthM":  6,
+                                          "lengthM":  7,
+                                          "areaM2":  42,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m3",
+                                          "normalizedType":  "classroom",
+                                          "label":  "Class Room 2",
+                                          "widthM":  6,
+                                          "lengthM":  7,
+                                          "areaM2":  42,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m4",
+                                          "normalizedType":  "classroom",
+                                          "label":  "Class Room 3",
+                                          "widthM":  6,
+                                          "lengthM":  7,
+                                          "areaM2":  42,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m5",
+                                          "normalizedType":  "classroom",
+                                          "label":  "Class Room 4",
+                                          "widthM":  6,
+                                          "lengthM":  7,
+                                          "areaM2":  42,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m6",
+                                          "normalizedType":  "classroom",
+                                          "label":  "classroom",
+                                          "widthM":  6,
+                                          "lengthM":  7,
+                                          "areaM2":  42,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m7",
+                                          "normalizedType":  "staircase",
+                                          "label":  "Staircase",
+                                          "widthM":  2.5,
+                                          "lengthM":  4.16,
+                                          "areaM2":  10.4,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      },
+                                      {
+                                          "id":  "m8",
+                                          "normalizedType":  "corridor",
+                                          "label":  "Corridor",
+                                          "widthM":  1.2,
+                                          "lengthM":  3,
+                                          "areaM2":  3.6,
+                                          "floor":  1,
+                                          "x":  0,
+                                          "y":  0
+                                      }
+                                  ],
+                        "floorFit":  [
+                                         {
+                                             "floor":  1,
+                                             "areaUsedM2":  234.5,
+                                             "areaAvailableM2":  360,
+                                             "usagePct":  65.1,
+                                             "status":  "PASS"
+                                         },
+                                         {
+                                             "floor":  2,
+                                             "areaUsedM2":  0,
+                                             "areaAvailableM2":  360,
+                                             "usagePct":  0,
+                                             "status":  "WARN"
+                                         },
+                                         {
+                                             "floor":  3,
+                                             "areaUsedM2":  0,
+                                             "areaAvailableM2":  360,
+                                             "usagePct":  0,
+                                             "status":  "WARN"
+                                         }
+                                     ],
+                        "circulation":  {
+                                            "corridorAreaM2":  3.6,
+                                            "totalAreaM2":  234.5,
+                                            "percentage":  1.5,
+                                            "status":  "PASS",
+                                            "corridorCount":  1
+                                        },
+                        "stairAlign":  {
+                                           "status":  "PASS",
+                                           "reason":  null,
+                                           "present":  true,
+                                           "floorCount":  3,
+                                           "detail":  "staircase floor: 1"
+                                       },
+                        "setback":  {
+                                        "status":  "NOT_VERIFIED",
+                                        "approvalReady":  false,
+                                        "scope":  "SETBACK_EVIDENCE_REQUIRED",
+                                        "missing":  [
+                                                        "frontSetbackM",
+                                                        "rearSetbackM",
+                                                        "sideSetbackLeftM",
+                                                        "sideSetbackRightM",
+                                                        "plotWidthM",
+                                                        "plotLengthM",
+                                                        "roadWidthM",
+                                                        "municipality",
+                                                        "applicableBylaw"
+                                                    ],
+                                        "reason":  "Site context र municipality bylaw बिना setback verify गर्न मिल्दैन"
+                                    },
+                        "issues":  [
+                                       "FLOOR_2_UNDERUSED (0%)",
+                                       "FLOOR_3_UNDERUSED (0%)"
+                                   ],
+                        "hardFailures":  [
+
+                                         ],
+                        "valid":  true
+                    }
+}

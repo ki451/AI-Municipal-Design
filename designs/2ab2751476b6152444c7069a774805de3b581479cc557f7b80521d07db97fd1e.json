@@ -1,0 +1,106 @@
+﻿{
+    "designId":  "SEED_FULL",
+    "buildingType":  "house",
+    "sourceUrl":  "",
+    "sourceHash":  "",
+    "signature":  "2ab2751476b6152444c7069a774805de3b581479cc557f7b80521d07db97fd1e",
+    "roomCount":  9,
+    "rooms":  [
+                  {
+                      "id":  "r1",
+                      "rawType":  "living",
+                      "label":  "Living",
+                      "normalizedType":  "living"
+                  },
+                  {
+                      "id":  "r2",
+                      "rawType":  "kitchen",
+                      "label":  "Kitchen",
+                      "normalizedType":  "kitchen"
+                  },
+                  {
+                      "id":  "r3",
+                      "rawType":  "dining",
+                      "label":  "Dining",
+                      "normalizedType":  "dining"
+                  },
+                  {
+                      "id":  "r4",
+                      "rawType":  "bedroom",
+                      "label":  "Master Bedroom",
+                      "normalizedType":  "bedroom"
+                  },
+                  {
+                      "id":  "r5",
+                      "rawType":  "bedroom",
+                      "label":  "Bedroom 2",
+                      "normalizedType":  "bedroom"
+                  },
+                  {
+                      "id":  "r6",
+                      "rawType":  "bathroom",
+                      "label":  "Bathroom",
+                      "normalizedType":  "bathroom"
+                  },
+                  {
+                      "id":  "r7",
+                      "rawType":  "puja",
+                      "label":  "Puja",
+                      "normalizedType":  "puja"
+                  },
+                  {
+                      "id":  "r8",
+                      "rawType":  "staircase",
+                      "label":  "Staircase",
+                      "normalizedType":  "staircase"
+                  },
+                  {
+                      "id":  "r9",
+                      "rawType":  "corridor",
+                      "label":  "Corridor",
+                      "normalizedType":  "corridor"
+                  }
+              ],
+    "adjacency":  {
+                      "r3":  [
+                                 "r9"
+                             ],
+                      "r8":  [
+                                 "r9"
+                             ],
+                      "r5":  [
+                                 "r9"
+                             ],
+                      "r2":  [
+                                 "r9"
+                             ],
+                      "r7":  [
+                                 "r9"
+                             ],
+                      "r4":  [
+                                 "r9",
+                                 "r6"
+                             ],
+                      "r9":  [
+                                 "r1",
+                                 "r2",
+                                 "r3",
+                                 "r4",
+                                 "r5",
+                                 "r7",
+                                 "r8"
+                             ],
+                      "r6":  [
+                                 "r4"
+                             ],
+                      "r1":  [
+                                 "r9"
+                             ]
+                  },
+    "completeness":  1,
+    "issues":  [
+
+               ],
+    "eligibleForKB":  true,
+    "extractedAt":  "2026-11-02T17:12:50.0894686+05:45"
+}
