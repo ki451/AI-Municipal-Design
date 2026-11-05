@@ -7,82 +7,80 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-import google.generativeai as genai
 
 app = Flask(__name__)
 app.config['OUTPUT_FOLDER'] = os.path.join(app.root_path, 'static', 'outputs')
 os.makedirs(app.config['OUTPUT_FOLDER'], exist_ok=True)
 
-# 🔒 API Key Render को Environment Variable बाट आउँछ
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-
-def get_designs_from_ai(site_length, site_width, requirements):
-    if not GEMINI_API_KEY:
-        print("❌ API Key missing!")
-        return get_fallback_designs(site_length, site_width)
-
-    # 🧠 साँच्चिकैको इन्जिनियर दिमाग (Agentic Prompt)
-    model = genai.GenerativeModel('gemini-1.5-pro') # Pro model is much smarter
+# 🧠 KISHAN AI - RULE BASED EXPERT ENGINE (No API Key Required)
+def generate_kishan_ai_designs(site_length, site_width, requirements):
+    # १. नेपाल सरकारको नियम अनुसार सेटब्याक (Setback) निकाल्ने (Front 5ft, Sides 3ft)
+    buildable_length = site_length - (5 + 3) # 5ft front, 3ft back
+    buildable_width = site_width - (3 + 3)   # 3ft left, 3ft right
     
-    prompt = f"""
-    You are the Chief Architect and Structural Engineer of Nepal. You strictly follow the Nepal National Building Code (NBC) and Vastu Shastra.
-    Site Dimensions: {site_length} ft by {site_width} ft.
-    Client Requirements: {requirements}.
+    if buildable_length <= 0 or buildable_width <= 0:
+        buildable_length = site_length * 0.8
+        buildable_width = site_width * 0.8
 
-    Before generating the layout, you MUST think step-by-step and apply these rules:
-    1. SETBACKS: Leave 5 ft from the front, 3 ft from the back, and 3 ft from both sides. The buildable area is the remaining space.
-    2. GROUND COVERAGE: Do not exceed 70% of the total site area.
-    3. ROOM SIZES: Minimum room sizes must be respected (e.g., Bedroom >= 10x10 ft, Kitchen >= 8x8 ft). Do not overlap rooms.
-    4. VASTU: Place Puja room in the North-East direction if requested.
-
-    Generate exactly 5 DIFFERENT layout concepts (e.g., L-Shape, U-Shape, Vastu Friendly, Open Plan, Compact).
+    # २. ५ वटा फरक-फरक डिजाइनको लजिक (Space Planning)
+    designs = []
     
-    Return the result STRICTLY as a valid JSON array of 5 objects. No markdown, no extra text.
-    Format:
-    [
-      {{
-        "title": "Concept Name",
-        "rooms": [
-          {{"name": "Living Room", "x": 5, "y": 5, "w": 15, "h": 12}}
-        ],
-        "boq": {{
-          "cement_bags": 450,
-          "steel_kg": 2500,
-          "bricks": 8000,
-          "sand_cft": 1200
-        }},
-        "estimated_cost_npr": 4500000
-      }}
+    # Option 1: Standard Plan (Living front, Beds back)
+    d1_rooms = [
+        {"name": "Living", "x": 3, "y": 3, "w": buildable_width, "h": buildable_length * 0.4},
+        {"name": "Kitchen", "x": 3, "y": 3 + buildable_length * 0.4, "w": buildable_width * 0.4, "h": buildable_length * 0.6},
+        {"name": "Bed 1", "x": 3 + buildable_width * 0.4, "y": 3 + buildable_length * 0.4, "w": buildable_width * 0.6, "h": buildable_length * 0.3},
+        {"name": "Bed 2", "x": 3 + buildable_width * 0.4, "y": 3 + buildable_length * 0.7, "w": buildable_width * 0.6, "h": buildable_length * 0.3}
     ]
-    Note: Calculate the BOQ and cost based on standard Nepali market rates and the total built-up area.
-    """
-    
-    try:
-        response = model.generate_content(
-            prompt,
-            generation_config={"response_mime_type": "application/json", "temperature": 0.7}
-        )
-        designs = json.loads(response.text)
-        if len(designs) != 5:
-            raise Exception("AI did not return exactly 5 designs")
-        return designs
-    except Exception as e:
-        print("⚠️ Gemini Error, using fallback:", e)
-        return get_fallback_designs(site_length, site_width)
+    designs.append({"title": "Standard Plan (Kishan AI)", "rooms": d1_rooms})
 
-def get_fallback_designs(site_length, site_width):
-    # ... (Fallback logic remains the same, in case API fails)
-    s_l = site_length - 10
-    s_w = site_width - 10
-    return [
-        {"title": "Standard Plan (Fallback)", "rooms": [{"name": "Living", "x": 5, "y": 5, "w": s_l, "h": s_w/2}, {"name": "Kitchen", "x": 5, "y": s_w/2+5, "w": s_l/2, "h": s_w/2}, {"name": "Bed", "x": s_l/2+5, "y": s_w/2+5, "w": s_l/2, "h": s_w/2}], "boq": {}, "estimated_cost_npr": 0},
-        {"title": "Open Plan (Fallback)", "rooms": [{"name": "Living+Kitchen", "x": 5, "y": 5, "w": s_l, "h": s_w*0.6}, {"name": "Bed 1", "x": 5, "y": s_w*0.6+5, "w": s_l/2, "h": s_w*0.4}, {"name": "Bed 2", "x": s_l/2+5, "y": s_w*0.6+5, "w": s_l/2, "h": s_w*0.4}], "boq": {}, "estimated_cost_npr": 0},
-        {"title": "L-Shape House (Fallback)", "rooms": [{"name": "Living", "x": 5, "y": 5, "w": s_l, "h": s_w/2}, {"name": "Bed", "x": 5, "y": s_w/2+5, "w": s_l/2, "h": s_w/2},{"name": "Kitchen", "x": s_l/2+5, "y": s_w/2+5, "w": s_l/2, "h": s_w/4}], "boq": {}, "estimated_cost_npr": 0},
-        {"title": "U-Shape (Fallback)", "rooms": [{"name": "Bed 1", "x": 5, "y": 5, "w": s_l/3, "h": s_w}, {"name": "Living", "x": s_l/3+5, "y": 5, "w": s_l/3, "h": s_w*0.6},{"name": "Bed 2", "x": 2*s_l/3+5, "y": 5, "w": s_l/3, "h": s_w}], "boq": {}, "estimated_cost_npr": 0},
-        {"title": "Vastu Friendly (Fallback)", "rooms": [{"name": "Puja", "x": 5, "y": s_w-10, "w": 10, "h": 10},{"name": "Living", "x": 5, "y": 5, "w": s_l, "h": s_w/2},{"name": "Kitchen", "x": s_l/2+5, "y": s_w/2+5, "w": s_l/2, "h": s_w/2-15},{"name": "Bed", "x": 5, "y": s_w/2+5, "w": s_l/2, "h": s_w/2-15}], "boq": {}, "estimated_cost_npr": 0}
+    # Option 2: Vastu Friendly (Puja in North-East)
+    d2_rooms = [
+        {"name": "Living", "x": 3, "y": 3, "w": buildable_width, "h": buildable_length * 0.5},
+        {"name": "Kitchen", "x": 3, "y": 3 + buildable_length * 0.5, "w": buildable_width * 0.5, "h": buildable_length * 0.5},
+        {"name": "Bed", "x": 3 + buildable_width * 0.5, "y": 3 + buildable_length * 0.5, "w": buildable_width * 0.3, "h": buildable_length * 0.5},
+        {"name": "Puja", "x": 3 + buildable_width * 0.8, "y": 3 + buildable_length * 0.8, "w": buildable_width * 0.2, "h": buildable_length * 0.2}
     ]
+    designs.append({"title": "Vastu Friendly (Kishan AI)", "rooms": d2_rooms})
+
+    # Option 3: Compact Core (Central Corridor)
+    d3_rooms = [
+        {"name": "Corridor", "x": 3 + (buildable_width/2) - 1, "y": 3, "w": 2, "h": buildable_length},
+        {"name": "Living", "x": 3, "y": 3, "w": (buildable_width/2) - 1, "h": buildable_length * 0.6},
+        {"name": "Kitchen", "x": 3, "y": 3 + buildable_length * 0.6, "w": (buildable_width/2) - 1, "h": buildable_length * 0.4},
+        {"name": "Bed 1", "x": 3 + (buildable_width/2) + 1, "y": 3, "w": (buildable_width/2) - 1, "h": buildable_length * 0.5},
+        {"name": "Bed 2", "x": 3 + (buildable_width/2) + 1, "y": 3 + buildable_length * 0.5, "w": (buildable_width/2) - 1, "h": buildable_length * 0.5}
+    ]
+    designs.append({"title": "Compact Corridor (Kishan AI)", "rooms": d3_rooms})
+
+    # Option 4: Open Plan (Living + Dining combined)
+    d4_rooms = [
+        {"name": "Living+Dining", "x": 3, "y": 3, "w": buildable_width, "h": buildable_length * 0.6},
+        {"name": "Kitchen", "x": 3, "y": 3 + buildable_length * 0.6, "w": buildable_width * 0.4, "h": buildable_length * 0.4},
+        {"name": "Bed", "x": 3 + buildable_width * 0.4, "y": 3 + buildable_length * 0.6, "w": buildable_width * 0.6, "h": buildable_length * 0.4}
+    ]
+    designs.append({"title": "Open Plan (Kishan AI)", "rooms": d4_rooms})
+
+    # Option 5: L-Shape House
+    d5_rooms = [
+        {"name": "Living", "x": 3, "y": 3, "w": buildable_width * 0.6, "h": buildable_length},
+        {"name": "Kitchen", "x": 3 + buildable_width * 0.6, "y": 3, "w": buildable_width * 0.4, "h": buildable_length * 0.5},
+        {"name": "Bed", "x": 3 + buildable_width * 0.6, "y": 3 + buildable_length * 0.5, "w": buildable_width * 0.4, "h": buildable_length * 0.5}
+    ]
+    designs.append({"title": "L-Shape Design (Kishan AI)", "rooms": d5_rooms})
+
+    # ३. BOQ (सिमेन्ट, स्टिल) र लागत हिसाब गर्ने
+    for design in designs:
+        builtup = sum([r["w"] * r["h"] for r in design["rooms"]])
+        # नेपालको सामान्य दर अनुसार (प्रति वर्गफिट करिब ३५००)
+        design["boq"] = {
+            "cement_bags": int(builtup * 0.4),
+            "steel_kg": int(builtup * 4),
+            "bricks": int(builtup * 8)
+        }
+        design["est_cost_npr"] = builtup * 3500
+    
+    return designs
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -94,16 +92,17 @@ def index():
         location = request.form.get('location', 'Kathmandu')
         requirements = request.form.get('requirements', '2 Bedrooms')
         
-        ai_designs = get_designs_from_ai(site_length, site_width, requirements)
+        # 🧠 यहाँ हामीले हाम्रो आफ्नै "Kishan AI" इन्जिन चलाएका छौं
+        ai_designs = generate_kishan_ai_designs(site_length, site_width, requirements)
         designs_data = []
 
         for i, design in enumerate(ai_designs):
             rooms = design.get("rooms", [])
             title = design.get("title", f"Option {i+1}")
             boq = design.get("boq", {})
-            est_cost = design.get("estimated_cost_npr", 0)
+            est_cost = design.get("est_cost_npr", 0)
             
-            # 1. AutoCAD DXF
+            # AutoCAD DXF
             doc = ezdxf.new('R2010')
             msp = doc.modelspace()
             doc.layers.add(name="Walls", color=7)
@@ -116,7 +115,7 @@ def index():
             dxf_path = os.path.join(app.config['OUTPUT_FOLDER'], dxf_filename)
             doc.saveas(dxf_path)
 
-            # 2. PDF Report (With BOQ)
+            # PDF Report
             pdf_filename = f"Report_Option_{i+1}.pdf"
             pdf_path = os.path.join(app.config['OUTPUT_FOLDER'], pdf_filename)
             c = canvas.Canvas(pdf_path, pagesize=landscape(A4))
@@ -142,18 +141,16 @@ def index():
             c.drawString(40, height - 170, f"F.A.R.: {far:.2f}")
             c.drawString(40, height - 185, f"Ground Coverage: {(builtup/total_area)*100:.1f}% (Max 70%)")
             
-            # BOQ Section
             c.setFont("Helvetica-Bold", 12)
-            c.drawString(40, height - 230, "2. ESTIMATED MATERIALS (BOQ)")
+            c.drawString(40, height - 230, "2. ESTIMATED MATERIALS & COST")
             c.setFont("Helvetica", 11)
-            c.drawString(40, height - 250, f"Cement: {boq.get('cement_bags', 'N/A')} Bags")
-            c.drawString(40, height - 265, f"Steel: {boq.get('steel_kg', 'N/A')} Kg")
-            c.drawString(40, height - 280, f"Bricks: {boq.get('bricks', 'N/A')} Pcs")
+            c.drawString(40, height - 250, f"Cement: {boq.get('cement_bags', 0)} Bags")
+            c.drawString(40, height - 265, f"Steel: {boq.get('steel_kg', 0)} Kg")
+            c.drawString(40, height - 280, f"Bricks: {boq.get('bricks', 0)} Pcs")
             c.drawString(40, height - 295, f"Estimated Cost: NPR {est_cost:,.2f}")
-            
             c.save()
 
-            # 3. Python 3D Render (Base64 Image)
+            # 3D Render (Base64)
             fig = plt.figure(figsize=(6, 6))
             ax = fig.add_subplot(111, projection='3d')
             colors_list = ['#ff9999','#66b3ff','#99ff99','#ffcc99', '#c2c2f0', '#ffb3e6']
