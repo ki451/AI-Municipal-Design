@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nepal AI Architect - 5 Options</title>
+    <title>Nepal AI Architect</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         h2 { color: #1a365d; text-align: center; }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
@@ -16,42 +16,33 @@
         button { background: #2b6cb0; color: white; border: none; padding: 12px; border-radius: 5px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         button:hover { background: #2c5282; }
         .results { margin-top: 30px; display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #fff; }
-        .card h3 { margin-top: 0; color: #2c5282; }
-        .btn-download { display: inline-block; background: #38a169; color: white; text-decoration: none; padding: 8px 12px; border-radius: 5px; margin-top: 10px; margin-right: 5px; font-size: 14px; }
-        img { width: 100%; max-width: 500px; border-radius: 8px; margin-top: 10px; border: 1px solid #eee; display: block; margin-left: auto; margin-right: auto; }
+        .card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; background: #fff; }
+        .card h3 { margin-top: 0; color: #2c5282; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .btn-download { display: inline-block; background: #38a169; color: white; text-decoration: none; padding: 10px 15px; border-radius: 5px; margin-top: 15px; margin-right: 10px; font-weight: bold; }
+        .btn-download:hover { background: #2f855a; }
+        img { width: 100%; max-width: 600px; border-radius: 8px; margin-top: 15px; border: 1px solid #eee; display: block; margin-left: auto; margin-right: auto; }
+        .boq-box { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #2b6cb0; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>🏛️ Nepal AI Architect (5 Options)</h2>
-        <p style="text-align: center; color: #666;">Generates designs based on Nepal Building Codes</p>
+        <h2>🏛️ Ultimate AI Architect & Engineer</h2>
+        <p style="text-align: center; color: #666;">Generates Designs, BOQ & Cost as per Nepal Building Code</p>
         
         <form method="POST">
-            <div class="form-group">
-                <label>Client Name</label>
-                <input type="text" name="client_name" value="Ram Bahadur" required>
-            </div>
-            <div class="form-group">
-                <label>Location</label>
-                <input type="text" name="location" value="Kathmandu" required>
+            <div class="row">
+                <div class="form-group"><label>Client Name</label><input type="text" name="client_name" value="Ram Bahadur" required></div>
+                <div class="form-group"><label>Location</label><input type="text" name="location" value="Kathmandu" required></div>
             </div>
             <div class="row">
-                <div class="form-group">
-                    <label>Site Length (ft)</label>
-                    <input type="number" name="site_length" value="30" required>
-                </div>
-                <div class="form-group">
-                    <label>Site Width (ft)</label>
-                    <input type="number" name="site_width" value="40" required>
-                </div>
+                <div class="form-group"><label>Site Length (ft)</label><input type="number" name="site_length" value="30" required></div>
+                <div class="form-group"><label>Site Width (ft)</label><input type="number" name="site_width" value="40" required></div>
             </div>
             <div class="form-group">
                 <label>Requirements</label>
                 <input type="text" name="requirements" value="2 Bedrooms, 1 Kitchen, 1 Living, 1 Bath, 1 Puja" required>
             </div>
-            
-            <button type="submit">Generate 5 Design Options</button>
+            <button type="submit">Generate 5 Engineering Designs</button>
         </form>
 
         {% if designs %}
@@ -59,10 +50,15 @@
             {% for design in designs %}
             <div class="card">
                 <h3>Option {{ loop.index }}: {{ design.title }}</h3>
-                <!-- यहाँ Base64 फोटो राखिएको छ, जसले गर्दा कहिल्यै ब्रेक हुँदैन -->
                 <img src="data:image/png;base64,{{ design.render_base64 }}" alt="3D Render">
-                <div style="text-align: center; margin-top: 10px;">
-                    <a href="{{ design.pdf_url }}" class="btn-download">📄 Download PDF</a>
+                
+                <div class="boq-box">
+                    <strong>📊 Estimated Cost (Nepali Market):</strong> NPR {{ "{:,.2f}".format(design.est_cost) }}<br>
+                    <small>Cement: {{ design.boq.get('cement_bags', 'N/A') }} bags | Steel: {{ design.boq.get('steel_kg', 'N/A') }} kg | Bricks: {{ design.boq.get('bricks', 'N/A') }} pcs</small>
+                </div>
+
+                <div style="text-align: center;">
+                    <a href="{{ design.pdf_url }}" class="btn-download">📄 Download PDF (with BOQ)</a>
                     <a href="{{ design.dxf_url }}" class="btn-download">📐 Download AutoCAD DXF</a>
                 </div>
             </div>
