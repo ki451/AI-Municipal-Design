@@ -10,15 +10,19 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import google.generativeai as genai
 
 app = Flask(__name__)
-app.config['OUTPUT_FOLDER'] = 'static/outputs'
+app.config['OUTPUT_FOLDER'] = os.path.join(app.root_path, 'static', 'outputs')
 os.makedirs(app.config['OUTPUT_FOLDER'], exist_ok=True)
 
-# 🔒 API Key अब कोड भित्र छैन, Render को Environment Variable बाट आउँछ
+# 🔒 API Key Render को Environment Variable बाट आउँछ
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
 def get_designs_from_ai(site_length, site_width, requirements):
+    if not GEMINI_API_KEY:
+        print("❌ API Key missing!")
+        return get_fallback_designs(site_length, site_width)
+
     model = genai.GenerativeModel('gemini-1.5-flash')
     
     prompt = f"""
@@ -32,32 +36,65 @@ def get_designs_from_ai(site_length, site_width, requirements):
     3. Include a Puja room in the North-East (Vastu).
     4. Ensure rooms do not overlap and fit within the buildable area.
     
-    Return ONLY a valid JSON array of 5 objects.
-    Each object must have:
-    1. "title": "Name of the design concept (e.g., Vastu Friendly, Open Plan, Compact)"
-    2. "rooms": Array of objects with: "name" (string), "x" (number), "y" (number), "w" (number), "h" (number).
-    
+    Return ONLY a valid JSON array of 5 objects. No markdown, no explanations.
+    Format:
+    [
+      {{
+        "title": "Name of Concept",
+        "rooms": [
+          {{"name": "Living", "x": 5, "y": 5, "w": 15, "h": 12}}
+        ]
+      }}
+    ]
     All dimensions must be in feet. Use bottom-left corner as (0,0).
-    Do not include markdown, only the raw JSON array.
     """
     
     try:
-        response = model.generate_content(prompt)
-        text = response.text.replace("```json", "").replace("```", "").strip()
-        designs = json.loads(text)
-        if len(designs) < 5:
-            raise Exception("AI did not return 5 designs")
+        # response_mime_type ले JSON मात्र दिन बाध्य पार्छ
+        response = model.generate_content(
+            prompt,
+            generation_config={"response_mime_type": "application/json"}
+        )
+        designs = json.loads(response.text)
+        if len(designs) != 5:
+            raise Exception("AI did not return exactly 5 designs")
         return designs
     except Exception as e:
-        print("Gemini Error, using fallback:", e)
-        # Fallback: 5 simple non-overlapping designs
-        return [
-            {"title": "Standard Plan", "rooms": [{"name": "Living", "x": 5, "y": 5, "w": site_length-10, "h": site_width/2}, {"name": "Kitchen", "x": 5, "y": site_width/2+5, "w": site_length/2-5, "h": site_width/2-10}, {"name": "Bed", "x": site_length/2+5, "y": site_width/2+5, "w": site_length/2-10, "h": site_width/2-10}]},
-            {"title": "Open Plan", "rooms": [{"name": "Living+Kitchen", "x": 5, "y": 5, "w": site_length-10, "h": site_width*0.6}, {"name": "Bed 1", "x": 5, "y": site_width*0.6+5, "w": site_length/2-5, "h": site_width*0.4-10}, {"name": "Bed 2", "x": site_length/2+5, "y": site_width*0.6+5, "w": site_length/2-10, "h": site_width*0.4-10}]},
-            {"title": "Vastu Friendly", "rooms": [{"name": "Puja", "x": 5, "y": site_width-15, "w": 10, "h": 10}, {"name": "Living", "x": 5, "y": 5, "w": site_length-10, "h": site_width/2}, {"name": "Kitchen", "x": site_length/2+5, "y": site_width/2+5, "w": site_length/2-10, "h": site_width/2-10}, {"name": "Bed", "x": 5, "y": site_width/2+5, "w": site_length/2-5, "h": site_width/2-10}]},
-            {"title": "Compact Core", "rooms": [{"name": "Hall", "x": 5, "y": 5, "w": site_length-10, "h": site_width-10}]},
-            {"title": "Courtyard", "rooms": [{"name": "Living", "x": 5, "y": 5, "w": site_length-10, "h": 15}, {"name": "Bed", "x": 5, "y": 20, "w": site_length-10, "h": site_width-25}]}
-        ]
+        print("⚠️ Gemini Error, using fallback:", e)
+        return get_fallback_designs(site_length, site_width)
+
+def get_fallback_designs(site_length, site_width):
+    # ५ वटा फरक-फरक ब्याकअप डिजाइन (यदि API फेल भयो भने)
+    s_l = site_length - 10
+    s_w = site_width - 10
+    return [
+        {"title": "Standard Plan (Fallback)", "rooms": [
+            {"name": "Living", "x": 5, "y": 5, "w": s_l, "h": s_w/2}, 
+            {"name": "Kitchen", "x": 5, "y": s_w/2+5, "w": s_l/2, "h": s_w/2}, 
+            {"name": "Bed", "x": s_l/2+5, "y": s_w/2+5, "w": s_l/2, "h": s_w/2}
+        ]},
+        {"title": "Open Plan (Fallback)", "rooms": [
+            {"name": "Living+Kitchen", "x": 5, "y": 5, "w": s_l, "h": s_w*0.6}, 
+            {"name": "Bed 1", "x": 5, "y": s_w*0.6+5, "w": s_l/2, "h": s_w*0.4}, 
+            {"name": "Bed 2", "x": s_l/2+5, "y": s_w*0.6+5, "w": s_l/2, "h": s_w*0.4}
+        ]},
+        {"title": "L-Shape House (Fallback)", "rooms": [
+            {"name": "Living", "x": 5, "y": 5, "w": s_l, "h": s_w/2}, 
+            {"name": "Bed", "x": 5, "y": s_w/2+5, "w": s_l/2, "h": s_w/2},
+            {"name": "Kitchen", "x": s_l/2+5, "y": s_w/2+5, "w": s_l/2, "h": s_w/4}
+        ]},
+        {"title": "U-Shape (Fallback)", "rooms": [
+            {"name": "Bed 1", "x": 5, "y": 5, "w": s_l/3, "h": s_w}, 
+            {"name": "Living", "x": s_l/3+5, "y": 5, "w": s_l/3, "h": s_w*0.6},
+            {"name": "Bed 2", "x": 2*s_l/3+5, "y": 5, "w": s_l/3, "h": s_w}
+        ]},
+        {"title": "Vastu Friendly (Fallback)", "rooms": [
+            {"name": "Puja", "x": 5, "y": s_w-10, "w": 10, "h": 10},
+            {"name": "Living", "x": 5, "y": 5, "w": s_l, "h": s_w/2},
+            {"name": "Kitchen", "x": s_l/2+5, "y": s_w/2+5, "w": s_l/2, "h": s_w/2-15},
+            {"name": "Bed", "x": 5, "y": s_w/2+5, "w": s_l/2, "h": s_w/2-15}
+        ]}
+    ]
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -76,7 +113,7 @@ def index():
             rooms = design["rooms"]
             title = design.get("title", f"Option {i+1}")
             
-            # --- 1. AutoCAD DXF ---
+            # 1. AutoCAD DXF
             doc = ezdxf.new('R2010')
             msp = doc.modelspace()
             doc.layers.add(name="Walls", color=7)
@@ -89,7 +126,7 @@ def index():
             dxf_path = os.path.join(app.config['OUTPUT_FOLDER'], dxf_filename)
             doc.saveas(dxf_path)
 
-            # --- 2. PDF Report ---
+            # 2. PDF Report
             pdf_filename = f"Report_Option_{i+1}.pdf"
             pdf_path = os.path.join(app.config['OUTPUT_FOLDER'], pdf_filename)
             c = canvas.Canvas(pdf_path, pagesize=landscape(A4))
@@ -116,7 +153,7 @@ def index():
             c.drawString(40, height - 185, f"Ground Coverage: {(builtup/total_area)*100:.1f}% (Max 70%)")
             c.save()
 
-            # --- 3. Python 3D Render (Wireframe) ---
+            # 3. Python 3D Render (Wireframe)
             fig = plt.figure(figsize=(6, 6))
             ax = fig.add_subplot(111, projection='3d')
             colors_list = ['#ff9999','#66b3ff','#99ff99','#ffcc99', '#c2c2f0', '#ffb3e6']
