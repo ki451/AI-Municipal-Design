@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>Requirements (e.g., 2 Bedrooms, 1 Kitchen)</label>
+                <label>Requirements</label>
                 <input type="text" name="requirements" value="2 Bedrooms, 1 Kitchen, 1 Living, 1 Bath, 1 Puja" required>
             </div>
             
@@ -59,7 +59,8 @@
             {% for design in designs %}
             <div class="card">
                 <h3>Option {{ loop.index }}: {{ design.title }}</h3>
-                <img src="{{ design.render_url }}" alt="3D Render">
+                <!-- यहाँ Base64 फोटो राखिएको छ, जसले गर्दा कहिल्यै ब्रेक हुँदैन -->
+                <img src="data:image/png;base64,{{ design.render_base64 }}" alt="3D Render">
                 <div style="text-align: center; margin-top: 10px;">
                     <a href="{{ design.pdf_url }}" class="btn-download">📄 Download PDF</a>
                     <a href="{{ design.dxf_url }}" class="btn-download">📐 Download AutoCAD DXF</a>

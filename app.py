@@ -1,5 +1,5 @@
 ﻿from flask import Flask, render_template, request, url_for
-import os, json, ezdxf
+import os, json, ezdxf, io, base64
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
@@ -30,41 +30,34 @@ def get_designs_from_ai(site_length, site_width, requirements):
     Design exactly 5 different layout options for a house on a site of {site_length} ft by {site_width} ft.
     Client Requirements: {requirements}.
     
-    Rules to follow strictly (Nepal Building Code):
+    Rules:
     1. Leave a setback of at least 5 ft from the front, and 3 ft from sides/back.
     2. Do not exceed Ground Coverage of 70%.
-    3. Include a Puja room in the North-East (Vastu).
-    4. Ensure rooms do not overlap and fit within the buildable area.
+    3. Include a Puja room in the North-East.
+    4. Ensure rooms do not overlap.
     
-    Return ONLY a valid JSON array of 5 objects. No markdown, no explanations.
+    Return ONLY a valid JSON array of 5 objects. No markdown.
     Format:
     [
-      {{
-        "title": "Name of Concept",
-        "rooms": [
-          {{"name": "Living", "x": 5, "y": 5, "w": 15, "h": 12}}
-        ]
-      }}
+      {{"title": "Concept Name", "rooms": [{{"name": "Living", "x": 5, "y": 5, "w": 15, "h": 12}}]}}
     ]
-    All dimensions must be in feet. Use bottom-left corner as (0,0).
+    All dimensions in feet. Bottom-left corner is (0,0).
     """
     
     try:
-        # response_mime_type ले JSON मात्र दिन बाध्य पार्छ
         response = model.generate_content(
             prompt,
             generation_config={"response_mime_type": "application/json"}
         )
         designs = json.loads(response.text)
         if len(designs) != 5:
-            raise Exception("AI did not return exactly 5 designs")
+            raise Exception("AI did not return 5 designs")
         return designs
     except Exception as e:
         print("⚠️ Gemini Error, using fallback:", e)
         return get_fallback_designs(site_length, site_width)
 
 def get_fallback_designs(site_length, site_width):
-    # ५ वटा फरक-फरक ब्याकअप डिजाइन (यदि API फेल भयो भने)
     s_l = site_length - 10
     s_w = site_width - 10
     return [
@@ -153,7 +146,7 @@ def index():
             c.drawString(40, height - 185, f"Ground Coverage: {(builtup/total_area)*100:.1f}% (Max 70%)")
             c.save()
 
-            # 3. Python 3D Render (Wireframe)
+            # 3. Python 3D Render (Base64 Image, कहिल्यै ब्रेक हुँदैन)
             fig = plt.figure(figsize=(6, 6))
             ax = fig.add_subplot(111, projection='3d')
             colors_list = ['#ff9999','#66b3ff','#99ff99','#ffcc99', '#c2c2f0', '#ffb3e6']
@@ -174,16 +167,18 @@ def index():
             ax.set_zlim(0, 4)
             ax.set_title(title)
             
-            render_filename = f"Render_Option_{i+1}.png"
-            render_path = os.path.join(app.config['OUTPUT_FOLDER'], render_filename)
-            plt.savefig(render_path, dpi=100, bbox_inches='tight')
-            plt.close()
+            # Save plot to memory buffer, then to base64
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png', dpi=100, bbox_inches='tight')
+            plt.close(fig)
+            buf.seek(0)
+            img_base64 = base64.b64encode(buf.read()).decode('utf-8')
 
             designs_data.append({
                 "title": title,
                 "dxf_url": url_for('static', filename=f'outputs/{dxf_filename}'),
                 "pdf_url": url_for('static', filename=f'outputs/{pdf_filename}'),
-                "render_url": url_for('static', filename=f'outputs/{render_filename}')
+                "render_base64": img_base64
             })
 
     return render_template('index.html', designs=designs_data)
