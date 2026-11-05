@@ -33,6 +33,7 @@ def process_design(image_path, site_length, site_width, client_name, location):
         Each room must have: "name" (string), "x" (int), "y" (int), "w" (int), "h" (int).
         Use a 0-1000 scale for coordinates. 
         Do not include markdown, only the JSON array.
+        If the image is not a floor plan (e.g. text, map, certificate), return [].
         """
         
         response = model.generate_content([prompt, img_pil])
@@ -40,7 +41,7 @@ def process_design(image_path, site_length, site_width, client_name, location):
         walls_data = json.loads(text)
         
         if not walls_data:
-            raise Exception("AI returned empty data")
+            raise Exception("AI returned empty data (Not a floor plan)")
 
     except Exception as e:
         print("Gemini API Error, using fallback:", e)
@@ -62,7 +63,7 @@ def process_design(image_path, site_length, site_width, client_name, location):
     for w in walls_data:
         points = [(w["x"], w["y"]), (w["x"]+w["w"], w["y"]), (w["x"]+w["w"], w["y"]+w["h"]), (w["x"], w["y"]+w["h"])]
         msp.add_lwpolyline(points, close=True, dxfattribs={"layer": "Walls"})
-        if "name" in w:
+        if "name" in w and w["name"] != "Room":
             msp.add_text(w["name"], dxfattribs={"layer": "Walls"}).set_placement((w["x"]+5, w["y"]+5))
     
     dxf_path = os.path.join(app.config['OUTPUT_FOLDER'], "Municipal_Plan.dxf")
