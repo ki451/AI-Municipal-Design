@@ -3,31 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nepal AI Architect</title>
+    <title>Kishan AI Architect</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { color: #1a365d; text-align: center; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { color: #1e293b; text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #64748b; margin-bottom: 25px; }
         .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
-        input[type="text"], input[type="number"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .row { display: flex; gap: 10px; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; color: #334155; font-size: 14px; }
+        input[type="text"], input[type="number"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
+        .row { display: flex; gap: 15px; }
         .row .form-group { flex: 1; }
-        button { background: #2b6cb0; color: white; border: none; padding: 12px; border-radius: 5px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
-        button:hover { background: #2c5282; }
-        .results { margin-top: 30px; display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; background: #fff; }
-        .card h3 { margin-top: 0; color: #2c5282; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .btn-download { display: inline-block; background: #38a169; color: white; text-decoration: none; padding: 10px 15px; border-radius: 5px; margin-top: 15px; margin-right: 10px; font-weight: bold; }
-        .btn-download:hover { background: #2f855a; }
-        img { width: 100%; max-width: 600px; border-radius: 8px; margin-top: 15px; border: 1px solid #eee; display: block; margin-left: auto; margin-right: auto; }
-        .boq-box { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #2b6cb0; }
+        button { background: #2563eb; color: white; border: none; padding: 14px; border-radius: 6px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; transition: 0.3s; }
+        button:hover { background: #1d4ed8; }
+        .result { margin-top: 30px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc; }
+        .result h3 { text-align: center; color: #16a34a; margin-bottom: 20px; }
+        .btn-download { display: inline-block; background: #16a34a; color: white; text-decoration: none; padding: 12px 20px; border-radius: 6px; margin-top: 15px; margin-right: 10px; font-weight: 600; }
+        .btn-download:hover { background: #15803d; }
+        .boq-box { background: white; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #2563eb; font-size: 14px; }
+        .svg-container { width: 100%; display: flex; justify-content: center; background: white; padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid #e2e8f0;}
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>🏛️ Ultimate AI Architect & Engineer</h2>
-        <p style="text-align: center; color: #666;">Generates Designs, BOQ & Cost as per Nepal Building Code</p>
+        <h2>🏛️ Kishan AI Architect</h2>
+        <p class="subtitle">Professional Floor Plan Generator</p>
         
         <form method="POST">
             <div class="row">
@@ -38,31 +38,25 @@
                 <div class="form-group"><label>Site Length (ft)</label><input type="number" name="site_length" value="30" required></div>
                 <div class="form-group"><label>Site Width (ft)</label><input type="number" name="site_width" value="40" required></div>
             </div>
-            <div class="form-group">
-                <label>Requirements</label>
-                <input type="text" name="requirements" value="2 Bedrooms, 1 Kitchen, 1 Living, 1 Bath, 1 Puja" required>
-            </div>
-            <button type="submit">Generate 5 Engineering Designs</button>
+            <button type="submit">🚀 Generate Professional Design</button>
         </form>
 
         {% if designs %}
-        <div class="results">
-            {% for design in designs %}
-            <div class="card">
-                <h3>Option {{ loop.index }}: {{ design.title }}</h3>
-                <img src="data:image/png;base64,{{ design.render_base64 }}" alt="3D Render">
-                
-                <div class="boq-box">
-                    <strong>📊 Estimated Cost (Nepali Market):</strong> NPR {{ "{:,.2f}".format(design.est_cost) }}<br>
-                    <small>Cement: {{ design.boq.get('cement_bags', 'N/A') }} bags | Steel: {{ design.boq.get('steel_kg', 'N/A') }} kg | Bricks: {{ design.boq.get('bricks', 'N/A') }} pcs</small>
-                </div>
-
-                <div style="text-align: center;">
-                    <a href="{{ design.pdf_url }}" class="btn-download">📄 Download PDF (with BOQ)</a>
-                    <a href="{{ design.dxf_url }}" class="btn-download">📐 Download AutoCAD DXF</a>
-                </div>
+        <div class="result">
+            <h3>✅ Final Design Ready!</h3>
+            
+            <div class="svg-container">
+                {{ designs.svg | safe }}
             </div>
-            {% endfor %}
+            
+            <div class="boq-box">
+                <strong>💰 Estimated Cost:</strong> NPR {{ "{:,.2f}".format(designs.cost) }}<br>
+                <small>Cement: {{ designs.boq.cement }} bags | Steel: {{ designs.boq.steel }} kg | Bricks: {{ designs.boq.bricks }} pcs</small>
+            </div>
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="{{ designs.pdf_url }}" class="btn-download">📄 Download PDF</a>
+                <a href="{{ designs.dxf_url }}" class="btn-download">📐 Download DXF</a>
+            </div>
         </div>
         {% endif %}
     </div>
