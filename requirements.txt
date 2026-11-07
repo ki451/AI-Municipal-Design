@@ -1,9 +1,3 @@
 ﻿flask
-opencv-python-headless
-numpy
 ezdxf
 reportlab
-matplotlib
-google-generativeai
-pillow
-gunicorn
